@@ -112,7 +112,7 @@ fun AddPurchaseScreen(
                     .fillMaxWidth()
                     .menuAnchor(),
             )
-            androidx.compose.material3.ExposedDropdownMenu(
+            ExposedDropdownMenu(
                 expanded = menuOpen,
                 onDismissRequest = { menuOpen = false },
             ) {
