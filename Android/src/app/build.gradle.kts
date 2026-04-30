@@ -121,6 +121,7 @@ dependencies {
   debugImplementation(libs.androidx.ui.test.manifest)
   ksp(libs.moshi.kotlin.codegen)
   implementation(libs.mlkit.genai.prompt)
+  implementation("com.google.mediapipe:tasks-vision:0.10.14")
 }
 
 protobuf {
