@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -70,6 +71,15 @@ dependencies {
 
     // DataStore (pet profile persistence)
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // Room (local persistence for pets, meals, alerts, monthly summaries)
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // WorkManager (periodic data pruning / rollup)
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
