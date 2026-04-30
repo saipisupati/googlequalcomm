@@ -12,4 +12,5 @@
 Android/src/.gradle/
 Android/src/build/
 Android/src/app/build/
+Android/src/.kotlin/
 local.properties
