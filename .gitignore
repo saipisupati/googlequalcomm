@@ -3,3 +3,13 @@
 # Model files - too large for GitHub
 *.litertlm
 *.tflite
+
+# IDE
+.idea/
+*.iml
+
+# Android build output
+Android/src/.gradle/
+Android/src/build/
+Android/src/app/build/
+local.properties
