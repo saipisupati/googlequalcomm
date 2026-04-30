@@ -4,20 +4,11 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Simple paw print, white on colored background -->
+    <!-- Stylized SnapDragon mark: chevron + flame, electric-blue accent -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M54,62 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0 z" />
+        android:fillColor="#00C2FF"
+        android:pathData="M54,28 L72,52 L62,52 L54,42 L46,52 L36,52 Z" />
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M38,42 m-6,0 a6,7 0 1,0 12,0 a6,7 0 1,0 -12,0 z" />
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M70,42 m-6,0 a6,7 0 1,0 12,0 a6,7 0 1,0 -12,0 z" />
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M30,55 m-5,0 a5,6 0 1,0 10,0 a5,6 0 1,0 -10,0 z" />
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M78,55 m-5,0 a5,6 0 1,0 10,0 a5,6 0 1,0 -10,0 z" />
+        android:fillColor="#FF6A3D"
+        android:pathData="M54,58 C48,62 44,68 44,74 C44,80 48,84 54,84 C60,84 64,80 64,74 C64,68 60,62 54,58 Z" />
 </vector>
