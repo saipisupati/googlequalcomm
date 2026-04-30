@@ -1,66 +1,65 @@
-# Kinex — Real-Time AI Form Coach
+# PawAI — On-Device Pet Nutrition Assistant
 
-**Kinex** is a real-time, privacy-first AI workout form coach built for the Qualcomm x Google Hackathon. It leverages on-device NPU processing to track your body mechanics in real-time and provide conversational, personalized coaching without ever sending your video to the cloud.
+PawAI is a privacy-first AI nutrition coach for your pets. Point your camera at your pet's food bowl and get an instant, personalized assessment of whether your pet is eating the right amount — entirely on-device, with no data ever leaving your phone.
 
-## 🏆 How It Works
+## How It Works
 
-Kinex combines state-of-the-art vision models with large language models to not only tell you *what* your body is doing, but *why* it matters and *how* to fix it.
+1. **Visual Food Recognition (FastVLM):** Camera scans the bowl. FastVLM identifies the food type, brand, and estimated portion size running on the Snapdragon NPU in real time.
 
-1. **Real-Time Tracking (MoveNet/MediaPipe):** Set your phone up facing you. As you exercise, Kinex runs pose estimation at 30fps entirely on the Snapdragon NPU, overlaying your skeletal structure and calculating joint angles in real-time.
-2. **Rep Detection State Machine:** Kinex automatically detects when you start and finish a repetition, analyzing form issues (e.g., knee cave, shallow depth, back inclination) during the movement.
-3. **Conversational Coaching (Gemma 3n):** Between reps, Kinex pauses the vision model and spins up Gemma 3n. Gemma interprets the joint angle deviations and generates natural, encouraging, and specific coaching feedback (e.g., *"Your left knee is drifting inward. Try widening your stance by 2 inches"*).
-4. **Form History (EmbeddingGemma):** *[WIP]* Your form history is stored as vector embeddings locally. Kinex recalls your historical patterns to give you progressive coaching over time.
+2. **Personalized Assessment (Gemma 4):** Gemma receives the food description alongside your pet's profile (breed, age, weight) and generates a plain-English nutrition assessment and feeding recommendation.
 
-## 🧠 Model Architecture
+3. **Feeding History (EmbeddingGemma):** Every meal is stored as a vector embedding locally. PawAI detects patterns over time — *"Mochi has eaten 20% less than usual the past two days"* — and factors this into its recommendations.
+
+## Model Architecture
 
 | Model | Role | Hardware |
 |---|---|---|
-| **MediaPipe Pose** | Real-time 33-point joint tracking and AR skeleton overlay. | NPU / CPU |
-| **Gemma 3n (1B)** | Converts mathematical angle deviations into natural language coaching feedback between reps. | NPU (SM8750) |
-| **FastVLM 0.5B** | Automatically identifies the exercise you are performing from the camera feed. | NPU (SM8750) |
-| **EmbeddingGemma** | Encodes historical form errors to personalize future coaching sessions. | NPU / CPU |
+| **FastVLM 0.5B** | Food identification from camera | NPU SM8750 |
+| **Gemma 4 E2B** via LiteRT-LM | Nutrition reasoning and assessment | NPU SM8750 |
+| **EmbeddingGemma** | Local feeding history and pattern detection | NPU / CPU |
 
-## 🔒 Privacy First
+### Memory Scheduling
 
-Nobody wants their gym videos sent to a cloud server. Kinex is **100% offline**.
-- The pose tracking happens on your device.
-- The coaching text is generated on your device.
-- Your form history never leaves your device. 
+FastVLM and Gemma never run simultaneously. FastVLM runs during the camera scan, then unloads. Gemma loads, generates the assessment, then unloads. EmbeddingGemma is lightweight enough to stay resident throughout.
 
-## 🚀 Building & Running
+## Privacy First
+
+Your pet's photos, health data, and feeding history never leave your device. Everything runs on the Snapdragon 8 Elite NPU.
+
+## Setup
 
 ### Prerequisites
 - Samsung Galaxy S25 Ultra (Snapdragon 8 Elite SM8750)
 - Android Studio Ladybug or later
-- ADB installed and device connected with USB Debugging enabled
+- ADB with USB debugging enabled
 
 ### Model Setup
-To run Kinex, you must push the pre-compiled LiteRT models to your device's `Download` folder.
-Run the following via ADB:
+Push the pre-compiled LiteRT models to your device's `Download` folder:
 
 ```bash
-# Push Gemma 3n
-adb push Gemma3-1B-IT_q4_ekv1280_sm8750.litertlm /sdcard/Download/
-
-# Push FastVLM
 adb push FastVLM-0.5B.qualcomm.sm8750.litertlm /sdcard/Download/
-
-# Push MediaPipe Pose Landmarker
-adb push pose_landmarker_lite.task /sdcard/Download/
+adb push gemma-4-E2B-it.litertlm /sdcard/Download/
+adb push embedding_gemma.tflite /sdcard/Download/
 ```
 
-### Compile
-1. Open the `Android` directory in Android Studio.
-2. Sync Project with Gradle Files.
-3. Hit **Run** to deploy to your connected device.
+### Build
+1. Open the `Android` folder in Android Studio
+2. File → Sync Project with Gradle Files
+3. Hit **Run**
 
-## 🛠 Project Structure
+## Project Structure
 
-Kinex is built on top of the robust Android LiteRT framework to handle complex memory scheduling and NPU delegation.
+- `PawAIScreen.kt` — Compose UI, CameraX, result card
+- `PawAIViewModel.kt` — Model memory scheduling, pipeline orchestration
+- `PetProfileStore.kt` — Local pet profile and EmbeddingGemma history
+- `NutritionPromptBuilder.kt` — Structures Gemma prompt from FastVLM output + pet profile
 
-- `KinexScreen.kt` - The Compose UI, CameraX preview, and AR canvas overlay.
-- `KinexViewModel.kt` - The core engine handling the Rep Detection State Machine and model memory scheduling.
-- `ExerciseDatabase.kt` - The knowledge base mapping joint angles to specific exercise form criteria.
+## App Flow
+
+1. **Pet Profile Setup** *(first launch)* — name, species, breed, age, weight, dietary restrictions, daily calorie target
+2. **Scan Screen** — live camera feed, FastVLM detects food as editable chips
+3. **Assessment Card** — streamed Gemma output with portion rating (good / slightly over / significantly over / under), log meal button
+4. **History** — timeline of meals, intake-vs-target trend line, flags for unusual eating patterns
 
 ---
 *Built for the Google AI Edge x Qualcomm Hackathon 2026.*
