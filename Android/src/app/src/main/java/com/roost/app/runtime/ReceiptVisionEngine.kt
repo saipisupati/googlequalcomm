@@ -41,18 +41,4 @@ class MockReceiptVisionEngine : ReceiptVisionEngine {
     }
 }
 
-/**
- * Real FastVLM 0.5B engine — placeholder.
- *
- * To wire up:
- *   1. Push /sdcard/Download/FastVLM-0.5B.qualcomm.sm8750.litertlm via scripts/push-models-to-device.sh
- *   2. In replace() body, build an EngineConfig with visionBackend set, run inference on
- *      the image bitmap, parse merchant + amount from the model's structured output.
- *   3. Flip DemoMode.ENABLED = false once stable.
- */
-class LiteRtVisionEngine : ReceiptVisionEngine {
-    override suspend fun extractPurchaseFromImage(imageUri: Uri?): PurchaseDraft {
-        // TODO: load FastVLM, run on imageUri, parse merchant + amount from output.
-        throw NotImplementedError("LiteRtVisionEngine not yet wired. Use MockReceiptVisionEngine in DemoMode.")
-    }
-}
+// Real LiteRtVisionEngine moved to its own file: see LiteRtVisionEngine.kt.

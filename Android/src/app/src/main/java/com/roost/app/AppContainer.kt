@@ -9,6 +9,7 @@ import com.roost.app.data.PurchaseRepository
 import com.roost.app.data.Seeder
 import com.roost.app.runtime.DemoMode
 import com.roost.app.runtime.FallbackLLMEngine
+import com.roost.app.runtime.FallbackVisionEngine
 import com.roost.app.runtime.LiteRtGemmaEngine
 import com.roost.app.runtime.LiteRtVisionEngine
 import com.roost.app.runtime.LocalLLMEngine
@@ -41,8 +42,11 @@ class AppContainer(context: Context) {
         else FallbackLLMEngine(primary = LiteRtGemmaEngine(context), secondary = mock)
     }
 
-    val vision: ReceiptVisionEngine =
-        if (DemoMode.FORCE_MOCK_VISION) MockReceiptVisionEngine() else LiteRtVisionEngine()
+    val vision: ReceiptVisionEngine = run {
+        val mock = MockReceiptVisionEngine()
+        if (DemoMode.FORCE_MOCK_VISION) mock
+        else FallbackVisionEngine(primary = LiteRtVisionEngine(context), secondary = mock)
+    }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

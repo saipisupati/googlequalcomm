@@ -18,5 +18,5 @@ object DemoMode {
     const val FORCE_MOCK_LLM: Boolean = false
 
     /** When true, skip the real LiteRtVisionEngine entirely and use MockReceiptVisionEngine. */
-    const val FORCE_MOCK_VISION: Boolean = true // FastVLM not yet wired
+    const val FORCE_MOCK_VISION: Boolean = false
 }
