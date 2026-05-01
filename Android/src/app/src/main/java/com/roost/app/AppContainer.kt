@@ -8,6 +8,7 @@ import com.roost.app.data.DragonRepository
 import com.roost.app.data.PurchaseRepository
 import com.roost.app.data.Seeder
 import com.roost.app.runtime.DemoMode
+import com.roost.app.runtime.FallbackLLMEngine
 import com.roost.app.runtime.LiteRtGemmaEngine
 import com.roost.app.runtime.LiteRtVisionEngine
 import com.roost.app.runtime.LocalLLMEngine
@@ -34,11 +35,14 @@ class AppContainer(context: Context) {
     val dragon = DragonRepository(db.dragonStateDao())
     val advice = AdviceRepository(db.aiAdviceDao())
 
-    val llm: LocalLLMEngine =
-        if (DemoMode.ENABLED) MockLocalLLMEngine() else LiteRtGemmaEngine(context)
+    val llm: LocalLLMEngine = run {
+        val mock = MockLocalLLMEngine()
+        if (DemoMode.FORCE_MOCK_LLM) mock
+        else FallbackLLMEngine(primary = LiteRtGemmaEngine(context), secondary = mock)
+    }
 
     val vision: ReceiptVisionEngine =
-        if (DemoMode.ENABLED) MockReceiptVisionEngine() else LiteRtVisionEngine()
+        if (DemoMode.FORCE_MOCK_VISION) MockReceiptVisionEngine() else LiteRtVisionEngine()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

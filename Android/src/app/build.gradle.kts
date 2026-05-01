@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.roost.app"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.roost.app"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
     }
