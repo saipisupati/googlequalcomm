@@ -69,16 +69,18 @@ class LiteRtVisionEngine(private val context: Context) : ReceiptVisionEngine {
     }
 
     private fun initEngineLocked(): Engine {
-        val modelFile = File(ModelPaths.fastVlmPath)
+        val modelPath = ModelInstaller.fastVlmPath(context)
+        val modelFile = File(modelPath)
         if (!modelFile.exists() || modelFile.length() < 1_000_000L) {
             throw IllegalStateException(
-                "FastVLM model not found at ${ModelPaths.fastVlmPath}. " +
-                    "Run scripts/push-models-to-device.sh or set DemoMode.FORCE_MOCK_VISION = true."
+                "FastVLM model not found at $modelPath. " +
+                    "Push to /sdcard/Download via scripts/push-models-to-device.sh; " +
+                    "the app copies it on launch. Or set DemoMode.FORCE_MOCK_VISION = true."
             )
         }
 
         val config = EngineConfig(
-            modelPath = ModelPaths.fastVlmPath,
+            modelPath = modelPath,
             backend = Backend.NPU(nativeLibraryDir = context.applicationInfo.nativeLibraryDir),
             visionBackend = Backend.NPU(nativeLibraryDir = context.applicationInfo.nativeLibraryDir),
             cacheDir = context.cacheDir.absolutePath,

@@ -59,16 +59,18 @@ class LiteRtGemmaEngine(private val context: Context) : LocalLLMEngine {
      * and fall back to mock.
      */
     private fun initEngineLocked(): Engine {
-        val modelFile = File(ModelPaths.gemmaPath)
+        val modelPath = ModelInstaller.gemmaPath(context)
+        val modelFile = File(modelPath)
         if (!modelFile.exists() || modelFile.length() < 1_000_000L) {
             throw IllegalStateException(
-                "Gemma model not found at ${ModelPaths.gemmaPath}. " +
-                    "Run scripts/push-models-to-device.sh or set DemoMode.LLM_ENABLED = false."
+                "Gemma model not found at $modelPath. " +
+                    "Push to /sdcard/Download via scripts/push-models-to-device.sh; " +
+                    "the app copies it on launch. Or set DemoMode.FORCE_MOCK_LLM = true."
             )
         }
 
         val config = EngineConfig(
-            modelPath = ModelPaths.gemmaPath,
+            modelPath = modelPath,
             backend = Backend.NPU(nativeLibraryDir = context.applicationInfo.nativeLibraryDir),
             cacheDir = context.cacheDir.absolutePath,
         )
