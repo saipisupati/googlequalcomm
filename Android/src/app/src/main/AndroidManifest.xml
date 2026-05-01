@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Intentionally NO android.permission.INTERNET. DragonBudget runs offline. -->
+    <!-- Intentionally NO android.permission.INTERNET. Roost runs offline. -->
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
-        android:name=".DragonBudgetApplication"
-        android:label="DragonBudget"
+        android:name=".RoostApplication"
+        android:label="Roost"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
-        android:theme="@style/Theme.DragonBudget"
+        android:theme="@style/Theme.Roost"
         android:allowBackup="false"
         android:supportsRtl="true">
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="DragonBudget"
-            android:theme="@style/Theme.DragonBudget">
+            android:label="Roost"
+            android:theme="@style/Theme.Roost">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

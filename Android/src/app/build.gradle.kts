@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.dragonbudget.app"
+    namespace = "com.roost.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.dragonbudget.app"
+        applicationId = "com.roost.app"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
@@ -66,8 +66,22 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 
+    // CameraX (for receipt scan)
+    val cameraxVersion = "1.3.4"
+    implementation("androidx.camera:camera-core:$cameraxVersion")
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+
+    // Activity result contracts (for runtime permission)
+    implementation("androidx.activity:activity-ktx:1.9.2")
+
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
+    // LiteRT-LM (FastVLM + Gemma 4 E2B inference)
+    // Resolves from Google Maven; ships native NPU bridge for Snapdragon 8 Elite (sm8750).
+    implementation("com.google.ai.edge.litertlm:litertlm-android:0.10.0")
 
     // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")

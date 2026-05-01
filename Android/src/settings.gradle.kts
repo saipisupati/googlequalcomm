@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PawAI"
+rootProject.name = "Roost"
 include(":app")

@@ -1,18 +1,18 @@
-# DragonBudget — Grow Your Dragon By Spending Wisely
+# Roost — Grow Your Dragon By Spending Wisely
 
-**DragonBudget** is a fully offline, on-device budgeting game for the Google AI Edge × Qualcomm LiteRT Hackathon. You care for **SnapDragon**, a Snapdragon-inspired baby dragon whose health, mood, and level reflect how responsibly you've been spending. Log purchases, scan receipts, and ask the dragon for advice — every byte of financial data stays on your phone.
+**Roost** is a fully offline, on-device budgeting game for the Google AI Edge × Qualcomm LiteRT Hackathon. You care for **SnapDragon**, a Snapdragon-inspired baby dragon whose health, mood, and level reflect how responsibly you've been spending. Log purchases, scan receipts, and ask the dragon for advice — every byte of financial data stays on your phone.
 
 ## Why On-Device
 
-Personal financial data is exactly the kind of thing people refuse to send to a cloud LLM. DragonBudget never asks for it: there is no internet permission in the manifest, no Firebase, no Plaid, no OpenAI. The app uses LiteRT-LM compiled models running on the Snapdragon NPU to generate budgeting advice locally, and a deterministic rule engine to make the actual game-state decisions.
+Personal financial data is exactly the kind of thing people refuse to send to a cloud LLM. Roost never asks for it: there is no internet permission in the manifest, no Firebase, no Plaid, no OpenAI. The app uses LiteRT-LM compiled models running on the Snapdragon NPU to generate budgeting advice locally, and a deterministic rule engine to make the actual game-state decisions.
 
 ## Track 1 — LLM Based Consumer Use Journeys
 
-| Judging criterion | How DragonBudget addresses it |
+| Judging criterion | How Roost addresses it |
 |---|---|
 | **Must use LiteRT/LiteRT-LM compiled model API** | Gemma 4 E2B (`.litertlm`) answers user questions; FastVLM 0.5B (`.litertlm`) extracts purchase details from a receipt photo |
 | **Technological implementation** | Inference is gated behind explicit user actions (ask the dragon / scan a receipt) — no continuous polling, no background battery drain. Rule engine is pure Kotlin and runs in microseconds, so the LLM is invoked only when natural-language output is genuinely needed |
-| **Use case + innovation** | Gamified budgeting that's fully offline. Existing budget apps (Mint, YNAB, Rocket Money) require cloud accounts. DragonBudget shows what the local-LLM era enables: a financial coach that's literally yours |
+| **Use case + innovation** | Gamified budgeting that's fully offline. Existing budget apps (Mint, YNAB, Rocket Money) require cloud accounts. Roost shows what the local-LLM era enables: a financial coach that's literally yours |
 | **Deployment + accessibility** | Single APK. No login, no signup, no internet. Open the app and you have a dragon |
 | **Presentation + documentation** | This README, in-code comments at every TODO marker for real model integration, a 90-second demo script |
 
@@ -89,14 +89,14 @@ The app launches in **DemoMode** by default (`runtime/DemoMode.kt`), where the L
 ## Project Structure
 
 ```
-Android/src/app/src/main/java/com/dragonbudget/app/
+Android/src/app/src/main/java/com/roost/app/
 ├── MainActivity.kt              # Compose entry, simple state-based nav
-├── DragonBudgetApplication.kt   # Holds the AppContainer
+├── RoostApplication.kt   # Holds the AppContainer
 ├── AppContainer.kt              # Manual DI: repos, engines, DB
 ├── data/
 │   ├── Entities.kt              # Room @Entity classes
 │   ├── Daos.kt                  # Room @Dao interfaces
-│   ├── DragonBudgetDatabase.kt  # Room database
+│   ├── RoostDatabase.kt  # Room database
 │   ├── Repositories.kt          # Thin DAO wrappers
 │   ├── Category.kt              # The 8 spending categories
 │   └── Seeder.kt                # Default budgets + initial dragon
@@ -132,7 +132,7 @@ Android/src/app/src/main/java/com/dragonbudget/app/
 ## Privacy & Network Posture
 
 - **No `<uses-permission android:name="android.permission.INTERNET" />`** in the manifest. The app cannot make network calls.
-- All persistence is in a single Room database file: `dragonbudget.db` in app-private storage.
+- All persistence is in a single Room database file: `roost.db` in app-private storage.
 - Model files live in `/sdcard/Download/` and are loaded via LiteRT-LM only when an inference is requested.
 
 ---
