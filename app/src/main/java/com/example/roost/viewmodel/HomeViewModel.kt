@@ -1,8 +1,8 @@
-package com.example.dragonbudget.viewmodel
+package com.example.roost.viewmodel
 
 import androidx.lifecycle.*
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.*
+import com.example.roost.AppContainer
+import com.example.roost.data.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -10,9 +10,9 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
 
     private val repo = container.repository
 
-    val dragonState: StateFlow<DragonState> = repo.getDragonState()
-        .map { it ?: DragonState() }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DragonState())
+    val roostState: StateFlow<RoostState> = repo.getRoostState()
+        .map { it ?: RoostState() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), RoostState())
 
     val recentPurchases: StateFlow<List<Purchase>> = repo.getRecentPurchases(5)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

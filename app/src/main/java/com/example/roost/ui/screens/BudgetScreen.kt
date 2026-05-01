@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.screens
+package com.example.roost.ui.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -23,10 +23,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.*
-import com.example.dragonbudget.ui.theme.*
-import com.example.dragonbudget.viewmodel.BudgetViewModel
+import com.example.roost.AppContainer
+import com.example.roost.data.*
+import com.example.roost.ui.theme.*
+import com.example.roost.viewmodel.BudgetViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,12 +59,12 @@ fun BudgetScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DragonDark,
+                    containerColor = RoostDark,
                     titleContentColor = TextPrimary
                 )
             )
         },
-        containerColor = DragonDark
+        containerColor = RoostDark
     ) { padding ->
 
         // Reset confirmation dialog
@@ -89,7 +89,7 @@ fun BudgetScreen(
                         Text("Cancel")
                     }
                 },
-                containerColor = DragonSurface
+                containerColor = RoostSurface
             )
         }
 
@@ -145,13 +145,13 @@ fun BudgetScreen(
                             label = { Text(preset) },
                             shape = RoundedCornerShape(12.dp),
                             colors = FilterChipDefaults.filterChipColors(
-                                containerColor = DragonSurface,
+                                containerColor = RoostSurface,
                                 labelColor = TextPrimary
                             ),
                             border = FilterChipDefaults.filterChipBorder(
                                 enabled = true,
                                 selected = false,
-                                borderColor = DragonBorder
+                                borderColor = RoostBorder
                             )
                         )
                     }
@@ -199,7 +199,7 @@ fun BudgetCategoryCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(DragonCard, RoundedCornerShape(20.dp))
+            .background(RoostCard, RoundedCornerShape(20.dp))
             .padding(16.dp)
     ) {
         Row(
@@ -211,7 +211,7 @@ fun BudgetCategoryCard(
                 // Emoji bubble
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = DragonBorder.copy(alpha = 0.5f),
+                    color = RoostBorder.copy(alpha = 0.5f),
                     modifier = Modifier.size(40.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -257,7 +257,7 @@ fun BudgetCategoryCard(
                 .height(6.dp)
                 .clip(RoundedCornerShape(3.dp)),
             color = progressColor,
-            trackColor = DragonBorder,
+            trackColor = RoostBorder,
         )
 
         Spacer(Modifier.height(8.dp))
@@ -324,7 +324,7 @@ fun BudgetCategoryCard(
                         },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DragonOrange)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = RoostOrange)
                     ) {
                         Text("Reset Spent", fontSize = 12.sp)
                     }

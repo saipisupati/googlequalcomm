@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.screens
+package com.example.roost.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
@@ -11,7 +11,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.dragonbudget.R
+import com.example.roost.R
 import kotlinx.coroutines.delay
 
 /**
@@ -23,7 +23,7 @@ import kotlinx.coroutines.delay
  * DYING    (health < 20):  Shows sleeping frame (static)
  */
 
-enum class DragonAnimState {
+enum class RoostAnimState {
     THRIVING,
     HEALTHY,
     DROWSY,
@@ -38,24 +38,24 @@ enum class DragonAnimState {
  * @param level Dragon level (affects scale)
  */
 @Composable
-fun AnimatedDragon(
+fun AnimatedRoost(
     healthPercent: Float,
     level: Int = 1,
     modifier: Modifier = Modifier
 ) {
     val animState = when {
-        healthPercent > 0.70f -> DragonAnimState.THRIVING
-        healthPercent > 0.40f -> DragonAnimState.HEALTHY
-        healthPercent > 0.20f -> DragonAnimState.DROWSY
-        else -> DragonAnimState.DYING
+        healthPercent > 0.70f -> RoostAnimState.THRIVING
+        healthPercent > 0.40f -> RoostAnimState.HEALTHY
+        healthPercent > 0.20f -> RoostAnimState.DROWSY
+        else -> RoostAnimState.DYING
     }
 
     // Pick a single frame based on state
     val frameRes = when (animState) {
-        DragonAnimState.THRIVING -> R.drawable.dragon_money_1
-        DragonAnimState.HEALTHY -> R.drawable.dragon_happy
-        DragonAnimState.DROWSY -> R.drawable.dragon_drowsy
-        DragonAnimState.DYING -> R.drawable.dragon_sleep_deep
+        RoostAnimState.THRIVING -> R.drawable.dragon_money_1
+        RoostAnimState.HEALTHY -> R.drawable.dragon_happy
+        RoostAnimState.DROWSY -> R.drawable.dragon_drowsy
+        RoostAnimState.DYING -> R.drawable.dragon_sleep_deep
     }
 
     // Gentle breathing pulse (subtle, not distracting)
@@ -74,9 +74,9 @@ fun AnimatedDragon(
     )
 
     // Opacity dims when dying
-    val dragonAlpha = when (animState) {
-        DragonAnimState.DYING -> 0.65f
-        DragonAnimState.DROWSY -> 0.85f
+    val roostAlpha = when (animState) {
+        RoostAnimState.DYING -> 0.65f
+        RoostAnimState.DROWSY -> 0.85f
         else -> 1.0f
     }
 
@@ -93,7 +93,7 @@ fun AnimatedDragon(
             modifier = Modifier
                 .fillMaxHeight()
                 .scale(breatheScale * levelScale)
-                .alpha(dragonAlpha),
+                .alpha(roostAlpha),
             contentScale = ContentScale.Fit
         )
     }

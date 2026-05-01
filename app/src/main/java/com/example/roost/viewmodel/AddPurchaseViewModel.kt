@@ -1,11 +1,11 @@
-package com.example.dragonbudget.viewmodel
+package com.example.roost.viewmodel
 
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.*
-import com.example.dragonbudget.engine.DragonStateEngine
+import com.example.roost.AppContainer
+import com.example.roost.data.*
+import com.example.roost.engine.RoostStateEngine
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -44,9 +44,9 @@ class AddPurchaseViewModel(private val container: AppContainer) : ViewModel() {
             val catInfo = cats.find { it.name == category }
             val percentUsed = catInfo?.percentUsed ?: 0f
 
-            val currentDragon = repo.getDragonStateOnce()
-            val updatedDragon = DragonStateEngine.onPurchase(currentDragon, category, percentUsed)
-            repo.updateDragonState(updatedDragon)
+            val currentRoost = repo.getRoostStateOnce()
+            val updatedRoost = RoostStateEngine.onPurchase(currentRoost, category, percentUsed)
+            repo.updateRoostState(updatedRoost)
 
             _saved.value = true
         }
@@ -77,9 +77,9 @@ class AddPurchaseViewModel(private val container: AppContainer) : ViewModel() {
             val catInfo = cats.find { it.name == mainCategory }
             val percentUsed = catInfo?.percentUsed ?: 0f
 
-            val currentDragon = repo.getDragonStateOnce()
-            val updatedDragon = DragonStateEngine.onPurchase(currentDragon, mainCategory, percentUsed)
-            repo.updateDragonState(updatedDragon)
+            val currentRoost = repo.getRoostStateOnce()
+            val updatedRoost = RoostStateEngine.onPurchase(currentRoost, mainCategory, percentUsed)
+            repo.updateRoostState(updatedRoost)
 
             _saved.value = true
         }

@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.screens
+package com.example.roost.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,10 +20,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.Categories
-import com.example.dragonbudget.ui.theme.*
-import com.example.dragonbudget.viewmodel.AddPurchaseViewModel
+import com.example.roost.AppContainer
+import com.example.roost.data.Categories
+import com.example.roost.ui.theme.*
+import com.example.roost.viewmodel.AddPurchaseViewModel
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -108,12 +108,12 @@ fun AddPurchaseScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DragonDark,
+                    containerColor = RoostDark,
                     titleContentColor = TextPrimary
                 )
             )
         },
-        containerColor = DragonDark
+        containerColor = RoostDark
     ) { padding ->
         Column(
             modifier = Modifier
@@ -252,7 +252,7 @@ fun AddPurchaseScreen(
                             singleLine = true,
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = ElectricBlue,
-                                unfocusedBorderColor = DragonBorder,
+                                unfocusedBorderColor = RoostBorder,
                                 focusedLabelColor = ElectricBlue,
                                 cursorColor = ElectricBlue,
                                 focusedTextColor = TextPrimary,
@@ -272,7 +272,7 @@ fun AddPurchaseScreen(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = ElectricBlue,
-                                unfocusedBorderColor = DragonBorder,
+                                unfocusedBorderColor = RoostBorder,
                                 focusedLabelColor = ElectricBlue,
                                 cursorColor = ElectricBlue,
                                 focusedTextColor = TextPrimary,
@@ -297,7 +297,7 @@ fun AddPurchaseScreen(
                                     .menuAnchor(),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedBorderColor = ElectricBlue,
-                                    unfocusedBorderColor = DragonBorder,
+                                    unfocusedBorderColor = RoostBorder,
                                     focusedTextColor = TextPrimary,
                                     unfocusedTextColor = TextPrimary,
                                 )
@@ -328,7 +328,7 @@ fun AddPurchaseScreen(
                             singleLine = true,
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = ElectricBlue,
-                                unfocusedBorderColor = DragonBorder,
+                                unfocusedBorderColor = RoostBorder,
                                 focusedLabelColor = ElectricBlue,
                                 cursorColor = ElectricBlue,
                                 focusedTextColor = TextPrimary,
@@ -372,7 +372,7 @@ fun AddPurchaseScreen(
 
 @Composable
 fun ScannedItemsList(
-    receiptScan: com.example.dragonbudget.data.ReceiptScanResult,
+    receiptScan: com.example.roost.data.ReceiptScanResult,
     merchant: String,
     onMerchantChange: (String) -> Unit,
     onToggleItem: (Int) -> Unit,
@@ -414,7 +414,7 @@ fun ScannedItemsList(
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = ElectricBlue,
-                unfocusedBorderColor = DragonBorder,
+                unfocusedBorderColor = RoostBorder,
                 focusedLabelColor = ElectricBlue,
                 cursorColor = ElectricBlue,
                 focusedTextColor = TextPrimary,
@@ -430,7 +430,7 @@ fun ScannedItemsList(
             itemsIndexed(receiptScan.items) { index, item ->
                 Card(
                     colors = CardDefaults.cardColors(
-                        containerColor = if (item.selected) DragonSurface else DragonDark
+                        containerColor = if (item.selected) RoostSurface else RoostDark
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -445,7 +445,7 @@ fun ScannedItemsList(
                             onCheckedChange = { onToggleItem(index) },
                             colors = CheckboxDefaults.colors(
                                 checkedColor = TealAccent,
-                                uncheckedColor = DragonBorder
+                                uncheckedColor = RoostBorder
                             )
                         )
                         Column(modifier = Modifier.weight(1f)) {
@@ -474,7 +474,7 @@ fun ScannedItemsList(
 
         // Bottom bar: selected total + save button
         Card(
-            colors = CardDefaults.cardColors(containerColor = DragonSurface),
+            colors = CardDefaults.cardColors(containerColor = RoostSurface),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(

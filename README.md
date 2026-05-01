@@ -1,4 +1,4 @@
-# 🐉 DragonBudget
+# 🐉 Roost
 
 > **Grow your SnapDragon by spending wisely.**  
 > An offline, on-device budgeting game powered by Qualcomm Snapdragon NPU + Google LiteRT-LM.
@@ -8,9 +8,9 @@ Google AI Edge x Qualcomm Hackathon 2026
 
 ---
 
-## 🎯 What is DragonBudget?
+## 🎯 What is Roost?
 
-DragonBudget turns personal budgeting into a game. Users care for a virtual dragon called **SnapDragon** whose health, mood, and level directly reflect their spending habits. Log purchases, track budgets, and get personalized AI advice — all 100% offline on the Snapdragon 8 Elite NPU.
+Roost turns personal budgeting into a game. Users care for a virtual dragon called **SnapDragon** whose health, mood, and level directly reflect their spending habits. Log purchases, track budgets, and get personalized AI advice — all 100% offline on the Snapdragon 8 Elite NPU.
 
 **No cloud. No bank login. No tracking. Just you, your budget, and your dragon.**
 
@@ -38,7 +38,7 @@ DragonBudget turns personal budgeting into a game. Users care for a virtual drag
 ├─────────────────────────────────────────────────────┤
 │                    ViewModels (MVVM)                 │
 ├─────────────────────────────────────────────────────┤
-│              DragonBudgetRepository                  │
+│              RoostRepository                  │
 ├───────────────┬───────────────┬──────────────────────┤
 │  Room Database│ DragonEngine  │   AI Engines          │
 │  (SQLite)     │ (Deterministic│   LocalLLMEngine      │
@@ -96,14 +96,14 @@ DragonBudget turns personal budgeting into a game. Users care for a virtual drag
 ## 📂 Project Structure
 
 ```
-app/src/main/java/com/example/dragonbudget/
+app/src/main/java/com/example/roost/
 ├── AppContainer.kt          # Simple DI container
 ├── MainActivity.kt          # Compose entry point
 ├── data/
 │   ├── Entities.kt          # Room entities + data classes
 │   ├── Daos.kt              # Room DAOs
-│   ├── DragonBudgetDatabase.kt
-│   └── DragonBudgetRepository.kt
+│   ├── RoostDatabase.kt
+│   └── RoostRepository.kt
 ├── engine/
 │   ├── DragonStateEngine.kt # Deterministic health/XP logic
 │   ├── AIEngines.kt         # LLM + Vision interfaces + mocks
@@ -153,7 +153,7 @@ adb push gemma-4-E2B-it_qualcomm_sm8750.litertlm /sdcard/Download/
 
 ## 📊 Judging Criteria Fit
 
-| Criteria | How DragonBudget Addresses It |
+| Criteria | How Roost Addresses It |
 |---|---|
 | **Uses LiteRT / LiteRT-LM** | Gemma 4 via LiteRT-LM for advice; FastVLM for receipt scanning. Clean `LocalLLMEngine` interface with TODO-annotated `LiteRtGemmaEngine` placeholder. |
 | **Runs fully offline** | Room database, no INTERNET permission needed for core functionality. All AI inference on-device. |

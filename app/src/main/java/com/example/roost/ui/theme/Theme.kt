@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.theme
+package com.example.roost.ui.theme
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -10,16 +10,16 @@ import androidx.compose.ui.unit.sp
 // Clean White & Grey Color Palette
 // ──────────────────────────────────────────────
 
-val DragonDark = Color(0xFFF5F5F7)       // Light background
-val DragonSurface = Color(0xFFFFFFFF)     // Pure white surface
-val DragonCard = Color(0xFFFFFFFF)        // White cards
-val DragonBorder = Color(0xFFE0E0E0)     // Light grey border
+val RoostDark = Color(0xFFF5F5F7)       // Light background
+val RoostSurface = Color(0xFFFFFFFF)     // Pure white surface
+val RoostCard = Color(0xFFFFFFFF)        // White cards
+val RoostBorder = Color(0xFFE0E0E0)     // Light grey border
 
 val ElectricBlue = Color(0xFF2563EB)     // Clean blue accent
 val TealAccent = Color(0xFF0D9488)       // Teal for positive
-val DragonOrange = Color(0xFFEA580C)     // Warm orange for dragon
-val DragonRed = Color(0xFFDC2626)        // Error red
-val DragonGold = Color(0xFFF59E0B)       // XP gold
+val RoostOrange = Color(0xFFEA580C)     // Warm orange for dragon
+val RoostRed = Color(0xFFDC2626)        // Error red
+val RoostGold = Color(0xFFF59E0B)       // XP gold
 
 val TextPrimary = Color(0xFF1A1A1A)      // Near black
 val TextSecondary = Color(0xFF6B7280)    // Medium grey
@@ -33,27 +33,27 @@ val HealthRed = Color(0xFFDC2626)        // Danger red
 // Light Theme
 // ──────────────────────────────────────────────
 
-private val DragonColorScheme = lightColorScheme(
+private val RoostColorScheme = lightColorScheme(
     primary = ElectricBlue,
     secondary = TealAccent,
-    tertiary = DragonOrange,
-    background = DragonDark,
-    surface = DragonSurface,
-    surfaceVariant = DragonCard,
+    tertiary = RoostOrange,
+    background = RoostDark,
+    surface = RoostSurface,
+    surfaceVariant = RoostCard,
     onPrimary = Color.White,
     onSecondary = Color.White,
     onBackground = TextPrimary,
     onSurface = TextPrimary,
     onSurfaceVariant = TextSecondary,
-    outline = DragonBorder,
-    error = DragonRed,
+    outline = RoostBorder,
+    error = RoostRed,
 )
 
 // ──────────────────────────────────────────────
 // Typography
 // ──────────────────────────────────────────────
 
-val DragonTypography = Typography(
+val RoostTypography = Typography(
     headlineLarge = androidx.compose.ui.text.TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
@@ -98,10 +98,10 @@ val DragonTypography = Typography(
 // ──────────────────────────────────────────────
 
 @Composable
-fun DragonBudgetTheme(content: @Composable () -> Unit) {
+fun RoostTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = DragonColorScheme,
-        typography = DragonTypography,
+        colorScheme = RoostColorScheme,
+        typography = RoostTypography,
         content = content
     )
 }

@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.screens
+package com.example.roost.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,10 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.*
-import com.example.dragonbudget.ui.theme.*
-import com.example.dragonbudget.viewmodel.HistoryViewModel
+import com.example.roost.AppContainer
+import com.example.roost.data.*
+import com.example.roost.ui.theme.*
+import com.example.roost.viewmodel.HistoryViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -68,12 +68,12 @@ fun HistoryScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DragonDark,
+                    containerColor = RoostDark,
                     titleContentColor = TextPrimary
                 )
             )
         },
-        containerColor = DragonDark
+        containerColor = RoostDark
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -88,7 +88,7 @@ fun HistoryScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(DragonCard, RoundedCornerShape(20.dp))
+                        .background(RoostCard, RoundedCornerShape(20.dp))
                         .padding(20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
@@ -128,7 +128,7 @@ fun HistoryScreen(
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = ElectricBlue.copy(alpha = 0.2f),
                             selectedLabelColor = ElectricBlue,
-                            containerColor = DragonCard,
+                            containerColor = RoostCard,
                             labelColor = TextSecondary
                         )
                     )
@@ -150,7 +150,7 @@ fun HistoryScreen(
                             colors = FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = ElectricBlue.copy(alpha = 0.2f),
                                 selectedLabelColor = ElectricBlue,
-                                containerColor = DragonCard,
+                                containerColor = RoostCard,
                                 labelColor = TextSecondary
                             )
                         )
@@ -164,7 +164,7 @@ fun HistoryScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(DragonCard, RoundedCornerShape(16.dp))
+                            .background(RoostCard, RoundedCornerShape(16.dp))
                             .padding(32.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dragonbudget"
+    namespace = "com.example.roost"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.dragonbudget"
+        applicationId = "com.example.roost"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

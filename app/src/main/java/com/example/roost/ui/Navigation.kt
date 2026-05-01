@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui
+package com.example.roost.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.dragonbudget.ui.screens.*
+import com.example.roost.ui.screens.*
 
 object Routes {
     const val HOME = "home"
@@ -17,7 +17,7 @@ object Routes {
 }
 
 @Composable
-fun DragonBudgetNavHost(appContainer: com.example.dragonbudget.AppContainer) {
+fun RoostNavHost(appContainer: com.example.roost.AppContainer) {
     val navController = rememberNavController()
 
     NavHost(
@@ -52,7 +52,7 @@ fun DragonBudgetNavHost(appContainer: com.example.dragonbudget.AppContainer) {
             HomeScreen(
                 appContainer = appContainer,
                 onNavigateToAddPurchase = { navController.navigate(Routes.ADD_PURCHASE) },
-                onNavigateToAskDragon = { navController.navigate(Routes.ASK_DRAGON) },
+                onNavigateToAskRoost = { navController.navigate(Routes.ASK_DRAGON) },
                 onNavigateToBudgets = { navController.navigate(Routes.BUDGETS) },
                 onNavigateToHistory = { navController.navigate(Routes.HISTORY) }
             )
@@ -70,7 +70,7 @@ fun DragonBudgetNavHost(appContainer: com.example.dragonbudget.AppContainer) {
             )
         }
         composable(Routes.ASK_DRAGON) {
-            AskDragonScreen(
+            AskRoostScreen(
                 appContainer = appContainer,
                 onBack = { navController.popBackStack() }
             )

@@ -1,4 +1,4 @@
-package com.example.dragonbudget.data
+package com.example.roost.data
 
 import android.content.Context
 import androidx.room.Database
@@ -6,26 +6,26 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Purchase::class, BudgetCategory::class, DragonState::class, AIAdvice::class],
+    entities = [Purchase::class, BudgetCategory::class, RoostState::class, AIAdvice::class],
     version = 1,
     exportSchema = false
 )
-abstract class DragonBudgetDatabase : RoomDatabase() {
+abstract class RoostDatabase : RoomDatabase() {
     abstract fun purchaseDao(): PurchaseDao
     abstract fun budgetCategoryDao(): BudgetCategoryDao
-    abstract fun dragonStateDao(): DragonStateDao
+    abstract fun roostStateDao(): RoostStateDao
     abstract fun aiAdviceDao(): AIAdviceDao
 
     companion object {
         @Volatile
-        private var INSTANCE: DragonBudgetDatabase? = null
+        private var INSTANCE: RoostDatabase? = null
 
-        fun getDatabase(context: Context): DragonBudgetDatabase {
+        fun getDatabase(context: Context): RoostDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    DragonBudgetDatabase::class.java,
-                    "dragonbudget.db"
+                    RoostDatabase::class.java,
+                    "roost.db"
                 ).fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

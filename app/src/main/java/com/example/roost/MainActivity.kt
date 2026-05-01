@@ -1,4 +1,4 @@
-package com.example.dragonbudget
+package com.example.roost
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import com.example.dragonbudget.ui.DragonBudgetNavHost
-import com.example.dragonbudget.ui.theme.DragonBudgetTheme
+import com.example.roost.ui.RoostNavHost
+import com.example.roost.ui.theme.RoostTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -23,8 +23,8 @@ class MainActivity : ComponentActivity() {
             initializeAI(appContainer)
 
             setContent {
-                DragonBudgetTheme {
-                    DragonBudgetNavHost(appContainer = appContainer)
+                RoostTheme {
+                    RoostNavHost(appContainer = appContainer)
                 }
             }
         } catch (e: Throwable) {
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     "/sdcard/Downloads",
                     "/storage/emulated/0/Download",
                     "/sdcard/Android/data/com.example.qnn_litertlm_gemma/files",
-                    "/sdcard/Android/data/com.example.dragonbudget/files"
+                    "/sdcard/Android/data/com.example.roost/files"
                 ).filterNotNull()
                 
                 var modelFile: java.io.File? = null

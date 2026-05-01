@@ -1,13 +1,13 @@
-package com.example.dragonbudget.viewmodel
+package com.example.roost.viewmodel
 
 import androidx.lifecycle.*
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.AIAdvice
-import com.example.dragonbudget.engine.PromptBuilder
+import com.example.roost.AppContainer
+import com.example.roost.data.AIAdvice
+import com.example.roost.engine.PromptBuilder
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class AskDragonViewModel(private val container: AppContainer) : ViewModel() {
+class AskRoostViewModel(private val container: AppContainer) : ViewModel() {
 
     private val repo = container.repository
 
@@ -20,13 +20,13 @@ class AskDragonViewModel(private val container: AppContainer) : ViewModel() {
     val recentAdvice: StateFlow<List<AIAdvice>> = repo.getRecentAdvice()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun askDragon(question: String) {
+    fun askRoost(question: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _response.value = ""
 
             try {
-                val dragon = repo.getDragonStateOnce()
+                val dragon = repo.getRoostStateOnce()
                 val categories = repo.getCategoriesWithSpent()
 
                 // Build the prompt
@@ -50,7 +50,7 @@ class AskDragonViewModel(private val container: AppContainer) : ViewModel() {
     class Factory(private val container: AppContainer) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AskDragonViewModel(container) as T
+            return AskRoostViewModel(container) as T
         }
     }
 }

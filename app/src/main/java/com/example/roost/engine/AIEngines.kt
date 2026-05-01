@@ -1,4 +1,4 @@
-package com.example.dragonbudget.engine
+package com.example.roost.engine
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,7 +9,7 @@ import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.net.Uri
 import android.util.Log
-import com.example.dragonbudget.data.*
+import com.example.roost.data.*
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions

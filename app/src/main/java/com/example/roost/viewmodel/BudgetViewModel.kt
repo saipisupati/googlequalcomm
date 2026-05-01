@@ -1,8 +1,8 @@
-package com.example.dragonbudget.viewmodel
+package com.example.roost.viewmodel
 
 import androidx.lifecycle.*
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.*
+import com.example.roost.AppContainer
+import com.example.roost.data.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -39,7 +39,7 @@ class BudgetViewModel(private val container: AppContainer) : ViewModel() {
     fun resetBudget() {
         viewModelScope.launch {
             repo.clearAllPurchases()
-            repo.resetDragonState()
+            repo.resetRoostState()
             refreshCategories()
         }
     }

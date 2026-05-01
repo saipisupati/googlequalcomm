@@ -1,8 +1,8 @@
-package com.example.dragonbudget.viewmodel
+package com.example.roost.viewmodel
 
 import androidx.lifecycle.*
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.Purchase
+import com.example.roost.AppContainer
+import com.example.roost.data.Purchase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -31,7 +31,7 @@ class HistoryViewModel(private val container: AppContainer) : ViewModel() {
     fun clearAll() {
         viewModelScope.launch {
             repo.clearAllPurchases()
-            repo.resetDragonState()
+            repo.resetRoostState()
         }
     }
 

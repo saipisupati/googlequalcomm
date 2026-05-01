@@ -1,4 +1,4 @@
-package com.example.dragonbudget.data
+package com.example.roost.data
 
 import androidx.room.*
 
@@ -32,7 +32,7 @@ data class BudgetCategory(
 // ──────────────────────────────────────────────
 
 @Entity(tableName = "dragon_state")
-data class DragonState(
+data class RoostState(
     @PrimaryKey val id: Int = 1,
     val name: String = "SnapDragon",
     val health: Int = 80,

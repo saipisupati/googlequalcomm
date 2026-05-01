@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.screens
+package com.example.roost.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,21 +20,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.AIAdvice
-import com.example.dragonbudget.ui.theme.*
-import com.example.dragonbudget.viewmodel.AskDragonViewModel
+import com.example.roost.AppContainer
+import com.example.roost.data.AIAdvice
+import com.example.roost.ui.theme.*
+import com.example.roost.viewmodel.AskRoostViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun AskDragonScreen(
+fun AskRoostScreen(
     appContainer: AppContainer,
     onBack: () -> Unit
 ) {
-    val viewModel: AskDragonViewModel = viewModel(
-        factory = AskDragonViewModel.Factory(appContainer)
+    val viewModel: AskRoostViewModel = viewModel(
+        factory = AskRoostViewModel.Factory(appContainer)
     )
     val response by viewModel.response.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -87,7 +87,7 @@ fun AskDragonScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DragonDark,
+                    containerColor = RoostDark,
                     titleContentColor = TextPrimary
                 )
             )
@@ -95,7 +95,7 @@ fun AskDragonScreen(
         bottomBar = {
             // Input bar pinned to bottom with IME awareness
             Surface(
-                color = DragonSurface,
+                color = RoostSurface,
                 tonalElevation = 3.dp,
                 modifier = Modifier.imePadding()
             ) {
@@ -120,14 +120,14 @@ fun AskDragonScreen(
                         keyboardActions = androidx.compose.foundation.text.KeyboardActions(
                             onSend = {
                                 if (question.isNotBlank() && !isLoading) {
-                                    viewModel.askDragon(question)
+                                    viewModel.askRoost(question)
                                     question = ""
                                 }
                             }
                         ),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = ElectricBlue,
-                            unfocusedBorderColor = DragonBorder,
+                            unfocusedBorderColor = RoostBorder,
                             cursorColor = ElectricBlue,
                             focusedTextColor = TextPrimary,
                             unfocusedTextColor = TextPrimary,
@@ -136,13 +136,13 @@ fun AskDragonScreen(
                     FilledIconButton(
                         onClick = {
                             if (question.isNotBlank()) {
-                                viewModel.askDragon(question)
+                                viewModel.askRoost(question)
                                 question = ""
                             }
                         },
                         enabled = question.isNotBlank() && !isLoading,
                         colors = IconButtonDefaults.filledIconButtonColors(
-                            containerColor = DragonOrange,
+                            containerColor = RoostOrange,
                             contentColor = Color.White
                         ),
                         shape = RoundedCornerShape(16.dp)
@@ -152,7 +152,7 @@ fun AskDragonScreen(
                 }
             }
         },
-        containerColor = DragonDark
+        containerColor = RoostDark
     ) { padding ->
         LazyColumn(
             state = scrollState,
@@ -174,17 +174,17 @@ fun AskDragonScreen(
                     quickQuestions.forEach { q ->
                         SuggestionChip(
                             onClick = {
-                                viewModel.askDragon(q)
+                                viewModel.askRoost(q)
                             },
                             label = { Text(q, fontSize = 12.sp) },
                             shape = RoundedCornerShape(20.dp),
                             colors = SuggestionChipDefaults.suggestionChipColors(
-                                containerColor = DragonCard,
+                                containerColor = RoostCard,
                                 labelColor = TextPrimary
                             ),
                             border = SuggestionChipDefaults.suggestionChipBorder(
                                 enabled = true,
-                                borderColor = DragonBorder
+                                borderColor = RoostBorder
                             )
                         )
                     }
@@ -197,13 +197,13 @@ fun AskDragonScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(DragonCard, RoundedCornerShape(20.dp))
+                            .background(RoostCard, RoundedCornerShape(20.dp))
                             .padding(20.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
-                            color = DragonOrange,
+                            color = RoostOrange,
                             strokeWidth = 2.dp
                         )
                         Spacer(Modifier.width(14.dp))
@@ -223,7 +223,7 @@ fun AskDragonScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                DragonOrange.copy(alpha = 0.08f),
+                                RoostOrange.copy(alpha = 0.08f),
                                 RoundedCornerShape(20.dp)
                             )
                             .padding(20.dp)
@@ -231,7 +231,7 @@ fun AskDragonScreen(
                         Text(
                             "🐉 SnapDragon",
                             fontWeight = FontWeight.Bold,
-                            color = DragonOrange,
+                            color = RoostOrange,
                             fontSize = 13.sp
                         )
                         Spacer(Modifier.height(8.dp))
@@ -265,7 +265,7 @@ fun AskDragonScreen(
                             Spacer(Modifier.height(8.dp))
                             Button(
                                 onClick = { appContainer.initAction?.invoke() },
-                                colors = ButtonDefaults.buttonColors(containerColor = DragonOrange),
+                                colors = ButtonDefaults.buttonColors(containerColor = RoostOrange),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
                                 Icon(Icons.Default.Refresh, null, modifier = Modifier.size(16.dp))
@@ -306,7 +306,7 @@ fun AdviceHistoryRow(advice: AIAdvice) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(DragonCard, RoundedCornerShape(16.dp))
+            .background(RoostCard, RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
         Text(

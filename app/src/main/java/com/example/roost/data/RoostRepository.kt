@@ -1,17 +1,17 @@
-package com.example.dragonbudget.data
+package com.example.roost.data
 
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
 
 /**
- * Repository — Single source of truth for all DragonBudget data.
+ * Repository — Single source of truth for all Roost data.
  * All operations are offline / local via Room.
  */
-class DragonBudgetRepository(private val db: DragonBudgetDatabase) {
+class RoostRepository(private val db: RoostDatabase) {
 
     private val purchaseDao = db.purchaseDao()
     private val categoryDao = db.budgetCategoryDao()
-    private val dragonDao = db.dragonStateDao()
+    private val roostDao = db.roostStateDao()
     private val adviceDao = db.aiAdviceDao()
 
     // ── Purchases ───────────────────────────────
@@ -29,8 +29,8 @@ class DragonBudgetRepository(private val db: DragonBudgetDatabase) {
 
     suspend fun clearAllPurchases() = purchaseDao.deleteAll()
 
-    suspend fun resetDragonState() {
-        dragonDao.insertOrUpdate(DragonState())
+    suspend fun resetRoostState() {
+        roostDao.insertOrUpdate(RoostState())
     }
 
     suspend fun getSpentInCategory(category: String): Double {
@@ -69,12 +69,12 @@ class DragonBudgetRepository(private val db: DragonBudgetDatabase) {
 
     // ── Dragon State ────────────────────────────
 
-    fun getDragonState(): Flow<DragonState?> = dragonDao.getDragonState()
+    fun getRoostState(): Flow<RoostState?> = roostDao.getRoostState()
 
-    suspend fun getDragonStateOnce(): DragonState =
-        dragonDao.getDragonStateOnce() ?: DragonState()
+    suspend fun getRoostStateOnce(): RoostState =
+        roostDao.getRoostStateOnce() ?: RoostState()
 
-    suspend fun updateDragonState(state: DragonState) = dragonDao.insertOrUpdate(state)
+    suspend fun updateRoostState(state: RoostState) = roostDao.insertOrUpdate(state)
 
     // ── AI Advice ───────────────────────────────
 
@@ -88,8 +88,8 @@ class DragonBudgetRepository(private val db: DragonBudgetDatabase) {
 
     suspend fun seedIfNeeded() {
         // Seed dragon
-        if (dragonDao.getDragonStateOnce() == null) {
-            dragonDao.insertOrUpdate(DragonState())
+        if (roostDao.getRoostStateOnce() == null) {
+            roostDao.insertOrUpdate(RoostState())
         }
         // Seed budget categories
         val existing = categoryDao.getCategory(Categories.FOOD)

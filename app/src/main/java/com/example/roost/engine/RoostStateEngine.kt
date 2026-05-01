@@ -1,16 +1,16 @@
-package com.example.dragonbudget.engine
+package com.example.roost.engine
 
-import com.example.dragonbudget.data.*
+import com.example.roost.data.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * DragonStateEngine — Deterministic dragon health/XP/mood updates.
+ * RoostStateEngine — Deterministic dragon health/XP/mood updates.
  *
  * This is the GAME ENGINE. It runs pure logic, no AI inference.
  * Gemma only EXPLAINS the dragon's state — it never controls it.
  */
-object DragonStateEngine {
+object RoostStateEngine {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
@@ -22,7 +22,7 @@ object DragonStateEngine {
      * @param percentUsed How much of that category's budget is now used (0.0 to 1.5+)
      * @return Updated dragon state
      */
-    fun onPurchase(current: DragonState, category: String, percentUsed: Float): DragonState {
+    fun onPurchase(current: RoostState, category: String, percentUsed: Float): RoostState {
         var health = current.health
         var xp = current.xp
         var level = current.level

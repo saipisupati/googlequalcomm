@@ -1,9 +1,9 @@
-package com.example.dragonbudget
+package com.example.roost
 
 import android.content.Context
-import com.example.dragonbudget.data.DragonBudgetDatabase
-import com.example.dragonbudget.data.DragonBudgetRepository
-import com.example.dragonbudget.engine.*
+import com.example.roost.data.RoostDatabase
+import com.example.roost.data.RoostRepository
+import com.example.roost.engine.*
 
 /**
  * Simple dependency container. No Hilt/Dagger for hackathon simplicity.
@@ -13,8 +13,8 @@ import com.example.dragonbudget.engine.*
  * - Vision: ML Kit OCR → Smart Parser → (optional) Gemma refinement
  */
 class AppContainer(context: Context) {
-    val database = DragonBudgetDatabase.getDatabase(context)
-    val repository = DragonBudgetRepository(database)
+    val database = RoostDatabase.getDatabase(context)
+    val repository = RoostRepository(database)
 
     // LiteRT-LM Manager (Qualcomm NPU inference)
     val liteRTLMManager = com.example.qnn_litertlm_gemma.LiteRTLMManager.getInstance(context)

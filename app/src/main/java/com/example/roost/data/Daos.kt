@@ -1,4 +1,4 @@
-package com.example.dragonbudget.data
+package com.example.roost.data
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
@@ -60,19 +60,19 @@ interface BudgetCategoryDao {
 }
 
 // ──────────────────────────────────────────────
-// DragonState DAO
+// RoostState DAO
 // ──────────────────────────────────────────────
 
 @Dao
-interface DragonStateDao {
+interface RoostStateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(state: DragonState)
+    suspend fun insertOrUpdate(state: RoostState)
 
     @Query("SELECT * FROM dragon_state WHERE id = 1")
-    fun getDragonState(): Flow<DragonState?>
+    fun getRoostState(): Flow<RoostState?>
 
     @Query("SELECT * FROM dragon_state WHERE id = 1")
-    suspend fun getDragonStateOnce(): DragonState?
+    suspend fun getRoostStateOnce(): RoostState?
 
     @Query("UPDATE dragon_state SET health = :health, xp = :xp, level = :level, mood = :mood, lastUpdated = :lastUpdated, streakDays = :streakDays, lastLogDate = :lastLogDate WHERE id = 1")
     suspend fun updateState(health: Int, xp: Int, level: Int, mood: String, lastUpdated: Long, streakDays: Int, lastLogDate: String)

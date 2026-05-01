@@ -1,4 +1,4 @@
-package com.example.dragonbudget.ui.screens
+package com.example.roost.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -23,11 +23,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.dragonbudget.AppContainer
-import com.example.dragonbudget.data.*
-import com.example.dragonbudget.engine.DragonStateEngine
-import com.example.dragonbudget.ui.theme.*
-import com.example.dragonbudget.viewmodel.HomeViewModel
+import com.example.roost.AppContainer
+import com.example.roost.data.*
+import com.example.roost.engine.RoostStateEngine
+import com.example.roost.ui.theme.*
+import com.example.roost.viewmodel.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,21 +36,21 @@ import java.util.*
 fun HomeScreen(
     appContainer: AppContainer,
     onNavigateToAddPurchase: () -> Unit,
-    onNavigateToAskDragon: () -> Unit,
+    onNavigateToAskRoost: () -> Unit,
     onNavigateToBudgets: () -> Unit,
     onNavigateToHistory: () -> Unit
 ) {
     val viewModel: HomeViewModel = viewModel(
         factory = HomeViewModel.Factory(appContainer)
     )
-    val dragon by viewModel.dragonState.collectAsState()
+    val dragon by viewModel.roostState.collectAsState()
     val recentPurchases by viewModel.recentPurchases.collectAsState()
     val totalSpent by viewModel.totalSpentThisWeek.collectAsState()
     val totalBudget by viewModel.totalBudgetThisWeek.collectAsState()
     val topCat by viewModel.topCategory.collectAsState()
 
     Scaffold(
-        containerColor = DragonDark,
+        containerColor = RoostDark,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToAddPurchase,
@@ -81,7 +81,7 @@ fun HomeScreen(
                 ) {
                     Column {
                         Text(
-                            "DragonBudget",
+                            "Roost",
                             fontSize = 28.sp,
                             fontWeight = FontWeight.Bold,
                             color = TextPrimary
@@ -96,12 +96,12 @@ fun HomeScreen(
                     if (dragon.streakDays > 0) {
                         Surface(
                             shape = RoundedCornerShape(20.dp),
-                            color = DragonOrange.copy(alpha = 0.15f)
+                            color = RoostOrange.copy(alpha = 0.15f)
                         ) {
                             Text(
                                 "🔥 ${dragon.streakDays}",
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                color = DragonOrange,
+                                color = RoostOrange,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp
                             )
@@ -112,7 +112,7 @@ fun HomeScreen(
                     Surface(
                         shape = RoundedCornerShape(12.dp),
                         color = (if (appContainer.liteRTLMManager.isEngineReady()) TealAccent else HealthRed).copy(alpha = 0.1f),
-                        modifier = Modifier.clickable { onNavigateToAskDragon() }
+                        modifier = Modifier.clickable { onNavigateToAskRoost() }
                     ) {
                         Row(
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -136,7 +136,7 @@ fun HomeScreen(
             }
 
             // ── Dragon Hero Card ──
-            item { DragonCard(dragon = dragon) }
+            item { RoostHeroCard(dragon = dragon) }
 
             // ── Budget + Quick Actions Row ──
             item {
@@ -155,8 +155,8 @@ fun HomeScreen(
                     QuickActionCard(
                         icon = Icons.Default.ChatBubble,
                         label = "Ask AI",
-                        accentColor = DragonOrange,
-                        onClick = onNavigateToAskDragon,
+                        accentColor = RoostOrange,
+                        onClick = onNavigateToAskRoost,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -211,7 +211,7 @@ fun HomeScreen(
 // ──────────────────────────────────────────────
 
 @Composable
-fun DragonCard(dragon: DragonState) {
+fun RoostHeroCard(dragon: RoostState) {
     val animatedHealth by animateFloatAsState(
         targetValue = dragon.health / 100f,
         animationSpec = tween(1000, easing = FastOutSlowInEasing),
@@ -235,16 +235,16 @@ fun DragonCard(dragon: DragonState) {
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(DragonStateEngine.getHealthColor(dragon.health)).copy(alpha = 0.08f),
-                            DragonCard,
-                            DragonCard
+                            Color(RoostStateEngine.getHealthColor(dragon.health)).copy(alpha = 0.08f),
+                            RoostCard,
+                            RoostCard
                         )
                     )
                 ),
             contentAlignment = Alignment.Center
         ) {
             // Dragon sprite
-            AnimatedDragon(
+            AnimatedRoost(
                 healthPercent = dragon.health / 100f,
                 level = dragon.level,
                 modifier = Modifier
@@ -272,19 +272,19 @@ fun DragonCard(dragon: DragonState) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "${DragonStateEngine.getMoodEmoji(dragon.mood)} ${dragon.name}",
+                        "${RoostStateEngine.getMoodEmoji(dragon.mood)} ${dragon.name}",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextPrimary
                     )
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = DragonOrange.copy(alpha = 0.2f)
+                        color = RoostOrange.copy(alpha = 0.2f)
                     ) {
                         Text(
                             "LV ${dragon.level}",
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                            color = DragonOrange,
+                            color = RoostOrange,
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp
                         )
@@ -297,7 +297,7 @@ fun DragonCard(dragon: DragonState) {
                 StatBar(
                     label = "HP",
                     progress = animatedHealth,
-                    color = Color(DragonStateEngine.getHealthColor(dragon.health)),
+                    color = Color(RoostStateEngine.getHealthColor(dragon.health)),
                     value = "${dragon.health}"
                 )
 
@@ -307,7 +307,7 @@ fun DragonCard(dragon: DragonState) {
                 StatBar(
                     label = "XP",
                     progress = animatedXp,
-                    color = DragonGold,
+                    color = RoostGold,
                     value = "${dragon.xp}"
                 )
             }
@@ -332,7 +332,7 @@ private fun StatBar(label: String, progress: Float, color: Color, value: String)
                 .height(6.dp)
                 .clip(RoundedCornerShape(3.dp)),
             color = color,
-            trackColor = DragonBorder,
+            trackColor = RoostBorder,
         )
         Spacer(Modifier.width(8.dp))
         Text(
@@ -361,7 +361,7 @@ fun BudgetMiniCard(spent: Double, budget: Double, onClick: () -> Unit, modifier:
 
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = DragonCard),
+        colors = CardDefaults.cardColors(containerColor = RoostCard),
         shape = RoundedCornerShape(20.dp),
         onClick = onClick
     ) {
@@ -387,7 +387,7 @@ fun BudgetMiniCard(spent: Double, budget: Double, onClick: () -> Unit, modifier:
                     .height(5.dp)
                     .clip(RoundedCornerShape(3.dp)),
                 color = if (percentUsed > 0.8f) HealthRed else TealAccent,
-                trackColor = DragonBorder
+                trackColor = RoostBorder
             )
         }
     }
@@ -407,7 +407,7 @@ fun QuickActionCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = DragonCard),
+        colors = CardDefaults.cardColors(containerColor = RoostCard),
         shape = RoundedCornerShape(20.dp),
         onClick = onClick
     ) {
@@ -446,7 +446,7 @@ fun QuickActionCard(
 fun EmptyStateCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = DragonCard),
+        colors = CardDefaults.cardColors(containerColor = RoostCard),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
@@ -485,7 +485,7 @@ fun PurchaseRow(purchase: Purchase) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(DragonCard, RoundedCornerShape(16.dp))
+            .background(RoostCard, RoundedCornerShape(16.dp))
             .padding(horizontal = 16.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -497,7 +497,7 @@ fun PurchaseRow(purchase: Purchase) {
             // Category icon bubble
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = DragonBorder.copy(alpha = 0.5f),
+                color = RoostBorder.copy(alpha = 0.5f),
                 modifier = Modifier.size(40.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -534,15 +534,15 @@ fun TopCategoryHighlight(category: BudgetCategoryWithSpent) {
     val percent = if (category.weeklyLimit > 0) category.spentAmount / category.weeklyLimit else 0.0
     val color = when {
         percent > 0.9 -> HealthRed
-        percent > 0.7 -> DragonOrange
+        percent > 0.7 -> RoostOrange
         else -> TealAccent
     }
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = DragonSurface,
-        border = androidx.compose.foundation.BorderStroke(1.dp, DragonBorder)
+        color = RoostSurface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, RoostBorder)
     ) {
         Row(
             modifier = Modifier

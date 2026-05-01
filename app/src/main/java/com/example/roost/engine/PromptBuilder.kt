@@ -1,6 +1,6 @@
-package com.example.dragonbudget.engine
+package com.example.roost.engine
 
-import com.example.dragonbudget.data.*
+import com.example.roost.data.*
 
 /**
  * PromptBuilder — Builds structured prompts for LiteRT-LM Gemma.
@@ -13,7 +13,7 @@ import com.example.dragonbudget.data.*
 object PromptBuilder {
 
     fun buildAdvicePrompt(
-        dragon: DragonState,
+        dragon: RoostState,
         categories: List<BudgetCategoryWithSpent>,
         userQuestion: String
     ): String {
