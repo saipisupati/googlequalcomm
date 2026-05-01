@@ -40,6 +40,7 @@ import com.roost.app.data.Category
 fun AddPurchaseScreen(
     viewModel: AddPurchaseViewModel,
     onBack: () -> Unit,
+    onScanReceiptClick: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -72,11 +73,11 @@ fun AddPurchaseScreen(
         )
 
         OutlinedButton(
-            onClick = { viewModel.onScanReceipt() },
+            onClick = onScanReceiptClick,
             enabled = !state.scanning,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(if (state.scanning) "Scanning…" else "📷 Scan receipt (mock)")
+            Text(if (state.scanning) "Reading receipt…" else "📷 Scan receipt")
         }
 
         OutlinedTextField(

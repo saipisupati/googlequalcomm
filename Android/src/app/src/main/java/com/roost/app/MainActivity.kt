@@ -19,6 +19,7 @@ import com.roost.app.ui.AddPurchaseScreen
 import com.roost.app.ui.AddPurchaseViewModel
 import com.roost.app.ui.AskDragonScreen
 import com.roost.app.ui.AskDragonViewModel
+import com.roost.app.ui.CameraScreen
 import com.roost.app.ui.HomeScreen
 import com.roost.app.ui.HomeViewModel
 import com.roost.app.ui.theme.RoostTheme
@@ -37,13 +38,16 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class Screen { Home, AddPurchase, AskDragon }
+private enum class Screen { Home, AddPurchase, Camera, AskDragon }
 
 @Composable
 private fun RoostApp(container: AppContainer) {
     var screen by remember { mutableStateOf(Screen.Home) }
 
     val factory = remember(container) { ViewModelFactory(container) }
+    // Single AddPurchaseViewModel shared between AddPurchase and Camera screens so
+    // captured photo URI flows back into the same form state.
+    val addPurchaseVm: AddPurchaseViewModel = viewModel(factory = factory)
 
     when (screen) {
         Screen.Home -> {
@@ -55,8 +59,20 @@ private fun RoostApp(container: AppContainer) {
             )
         }
         Screen.AddPurchase -> {
-            val vm: AddPurchaseViewModel = viewModel(factory = factory)
-            AddPurchaseScreen(viewModel = vm, onBack = { screen = Screen.Home })
+            AddPurchaseScreen(
+                viewModel = addPurchaseVm,
+                onBack = { screen = Screen.Home },
+                onScanReceiptClick = { screen = Screen.Camera },
+            )
+        }
+        Screen.Camera -> {
+            CameraScreen(
+                onCaptured = { uri ->
+                    addPurchaseVm.onPhotoCaptured(uri)
+                    screen = Screen.AddPurchase
+                },
+                onCancel = { screen = Screen.AddPurchase },
+            )
         }
         Screen.AskDragon -> {
             val vm: AskDragonViewModel = viewModel(factory = factory)

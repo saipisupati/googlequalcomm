@@ -1,5 +1,6 @@
 package com.roost.app.ui
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roost.app.AppContainer
@@ -23,6 +24,7 @@ data class AddPurchaseUiState(
     val saving: Boolean = false,
     val saved: Boolean = false,
     val scanning: Boolean = false,
+    val capturedImageUri: Uri? = null,
 )
 
 class AddPurchaseViewModel(private val container: AppContainer) : ViewModel() {
@@ -34,14 +36,29 @@ class AddPurchaseViewModel(private val container: AppContainer) : ViewModel() {
     fun onCategoryChange(v: Category) = _state.update { it.copy(category = v) }
     fun onNoteChange(v: String) = _state.update { it.copy(note = v) }
 
-    fun onScanReceipt() {
+    /**
+     * Called by MainActivity after CameraScreen captures a photo.
+     * Kicks off vision inference and fills the form fields with the result.
+     */
+    fun onPhotoCaptured(uri: Uri) {
+        _state.update { it.copy(capturedImageUri = uri, scanning = true) }
         viewModelScope.launch {
-            _state.update { it.copy(scanning = true) }
-            val draft: PurchaseDraft = container.vision.extractPurchaseFromImage(imageUri = null)
+            val draft: PurchaseDraft = runCatching {
+                container.vision.extractPurchaseFromImage(imageUri = uri)
+            }.getOrElse { err ->
+                // Vision failed (model missing, parse error, etc.). Fall back to a sensible default
+                // so the user can still edit and save. Same UX as a failed-to-recognize scan.
+                PurchaseDraft(
+                    merchant = "",
+                    amount = 0.0,
+                    suggestedCategory = Category.Other,
+                    confidence = 0f,
+                )
+            }
             _state.update {
                 it.copy(
                     merchant = draft.merchant,
-                    amount = "%.2f".format(draft.amount),
+                    amount = if (draft.amount > 0) "%.2f".format(draft.amount) else "",
                     category = draft.suggestedCategory,
                     scanning = false,
                 )
