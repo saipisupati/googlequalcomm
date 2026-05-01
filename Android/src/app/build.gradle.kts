@@ -52,7 +52,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.9.2")
 
     // Compose
-    val composeBom = platform("androidx.compose:compose-bom:2024.09.02")
+    val composeBom = platform("androidx.compose:compose-bom:2026.04.01")
     implementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -60,8 +60,12 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
 
-    // Room
-    val roomVersion = "2.6.1"
+    // Pin Kotlin BOM so all transitive Kotlin libraries align with the compiler version.
+    // LiteRT-LM 0.10.0 pulls in kotlin-stdlib 2.2.21 transitively; bumping to 2.3.21 here.
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.3.21"))
+
+    // Room (KSP2 supported in 2.7+; using 2.8.x for latest stable)
+    val roomVersion = "2.8.4"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
