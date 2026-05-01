@@ -3,22 +3,21 @@ package com.roost.app.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roost.app.AppContainer
+import com.roost.app.ModelStatus
 import com.roost.app.data.DragonStateEntity
 import com.roost.app.data.PurchaseEntity
 import com.roost.app.data.Seeder
 import com.roost.app.domain.BudgetEngine
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 data class HomeUiState(
     val dragon: DragonStateEntity = Seeder.initialDragon,
     val statuses: List<BudgetEngine.CategoryStatus> = emptyList(),
     val recentPurchases: List<PurchaseEntity> = emptyList(),
+    val modelStatus: ModelStatus = ModelStatus(false, false, false, false),
 ) {
     val totalRemaining: Double get() = BudgetEngine.totalRemaining(statuses)
 }
@@ -39,10 +38,11 @@ class HomeViewModel(private val container: AppContainer) : ViewModel() {
                 dragon = dragon ?: Seeder.initialDragon,
                 statuses = statuses,
                 recentPurchases = recent,
+                modelStatus = container.modelStatus(),
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = HomeUiState(),
+            initialValue = HomeUiState(modelStatus = container.modelStatus()),
         )
 }

@@ -5,75 +5,61 @@ import android.util.Log
 import java.io.File
 
 /**
- * Copies LiteRT model files from /sdcard/Download/ (where the user pushes them via adb)
- * into the app's private storage. Required because:
- *   - Android 11+ blocks raw filesystem reads from /sdcard/Download/ without
- *     READ_MEDIA_VISUAL_USER_SELECTED or MANAGE_EXTERNAL_STORAGE.
- *   - The native LiteRT-LM engine opens files via plain open(), so it can't use
- *     SAF or MediaStore.
+ * Resolves the on-device path for each LiteRT model file. The user pushes models
+ * directly to the app's private external storage via scripts/push-models-to-device.sh,
+ * which targets /sdcard/Android/data/com.roost.app/files/models/. The app can read
+ * that location without any runtime permission, so no copying or permission flow needed.
  *
- * App-private storage (context.filesDir) needs no permission. We copy once on
- * first run, after which inference loads from the private path.
- *
- * The copy is incremental: if the destination file already exists with a matching
- * size, we skip it. So pushing a new model variant via adb just requires deleting
- * the cached copy or bumping the source size.
+ * The legacy /sdcard/Download path was rejected because Android 11+ requires
+ * READ_MEDIA_* permissions for raw filesystem reads there, and the native LiteRT-LM
+ * engine opens via plain open() (not SAF/MediaStore).
  */
 object ModelInstaller {
     private const val TAG = "ModelInstaller"
-    private const val SOURCE_DIR = "/sdcard/Download"
 
     /**
-     * Ensure all three model files are available in the app's private storage.
-     * Returns true if all expected files are present after the call.
-     *
-     * Safe to call multiple times — does the minimum work.
+     * Returns the directory where models should live on-device. Creates it if missing.
+     * Uses the app's external files dir which is readable without runtime permission.
      */
-    fun ensureInstalled(context: Context): Boolean {
-        val targetDir = File(context.filesDir, "models").apply { mkdirs() }
-        val files = listOf(
+    private fun modelsDir(context: Context): File {
+        val external = context.getExternalFilesDir(null)
+            ?: error("External files dir unavailable; device storage may be full or shared storage detached.")
+        return File(external, "models").apply { if (!exists()) mkdirs() }
+    }
+
+    /**
+     * Logs which model files are present and their sizes. Useful for debugging
+     * "why did the engine fall back to mock?" issues during the demo.
+     */
+    fun logStatus(context: Context) {
+        val dir = modelsDir(context)
+        Log.i(TAG, "Models dir: ${dir.absolutePath}")
+        listOf(
             ModelPaths.GEMMA_FILENAME,
             ModelPaths.FAST_VLM_FILENAME,
             ModelPaths.EMBEDDING_GEMMA_FILENAME,
-        )
-        var allPresent = true
-        for (filename in files) {
-            val src = File(SOURCE_DIR, filename)
-            val dst = File(targetDir, filename)
-            when {
-                dst.exists() && src.exists() && dst.length() == src.length() -> {
-                    Log.i(TAG, "$filename already installed (${dst.length() / 1_000_000}MB)")
-                }
-                src.exists() -> {
-                    Log.i(TAG, "Copying $filename (${src.length() / 1_000_000}MB) to private storage…")
-                    val started = System.currentTimeMillis()
-                    try {
-                        src.copyTo(dst, overwrite = true)
-                        Log.i(TAG, "$filename copied in ${System.currentTimeMillis() - started}ms")
-                    } catch (t: Throwable) {
-                        Log.e(TAG, "Failed to copy $filename", t)
-                        allPresent = false
-                    }
-                }
-                dst.exists() -> {
-                    // Source missing but we already have a copy — fine.
-                    Log.i(TAG, "$filename present in private storage; source missing")
-                }
-                else -> {
-                    Log.w(TAG, "$filename missing in both /sdcard/Download and private storage")
-                    allPresent = false
-                }
+        ).forEach { name ->
+            val f = File(dir, name)
+            if (f.exists()) {
+                Log.i(TAG, "  $name: ${f.length() / 1_000_000}MB")
+            } else {
+                Log.w(TAG, "  $name: MISSING")
             }
         }
-        return allPresent
     }
 
     fun gemmaPath(context: Context): String =
-        File(File(context.filesDir, "models"), ModelPaths.GEMMA_FILENAME).absolutePath
+        File(modelsDir(context), ModelPaths.GEMMA_FILENAME).absolutePath
 
     fun fastVlmPath(context: Context): String =
-        File(File(context.filesDir, "models"), ModelPaths.FAST_VLM_FILENAME).absolutePath
+        File(modelsDir(context), ModelPaths.FAST_VLM_FILENAME).absolutePath
 
     fun embeddingGemmaPath(context: Context): String =
-        File(File(context.filesDir, "models"), ModelPaths.EMBEDDING_GEMMA_FILENAME).absolutePath
+        File(modelsDir(context), ModelPaths.EMBEDDING_GEMMA_FILENAME).absolutePath
+
+    fun gemmaPresent(context: Context): Boolean =
+        File(modelsDir(context), ModelPaths.GEMMA_FILENAME).exists()
+
+    fun fastVlmPresent(context: Context): Boolean =
+        File(modelsDir(context), ModelPaths.FAST_VLM_FILENAME).exists()
 }

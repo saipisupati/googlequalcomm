@@ -1,14 +1,21 @@
 #!/usr/bin/env bash
-# Push downloaded LiteRT-LM model files from ~/pawai-models/ to /sdcard/Download/
-# on the connected Android device.
+# Push downloaded LiteRT-LM model files to the app's private external storage.
 #
-# Prerequisite: ./download-models.sh has been run successfully.
+# IMPORTANT: pushes to /sdcard/Android/data/com.roost.app/files/models/
+# instead of /sdcard/Download/. This is the app's "external files" directory,
+# which the app can read without any runtime permission. /sdcard/Download
+# requires READ_MEDIA_VISUAL_USER_SELECTED on Android 11+, and the native
+# LiteRT-LM engine opens via plain open() which can't go through SAF.
+#
+# The app must be installed before running this script (the destination
+# directory is created when the app first launches).
 #
 # Total ~4.1 GB. Over USB 3 expect 1-2 min.
 set -euo pipefail
 
 SRC="${HOME}/pawai-models"
-DEST="/sdcard/Download"
+PACKAGE="com.roost.app"
+DEST="/sdcard/Android/data/${PACKAGE}/files/models"
 
 if [ ! -d "$SRC" ]; then
   echo "Error: $SRC does not exist. Run download-models.sh first."
@@ -29,6 +36,11 @@ fi
 echo "==> Connected devices:"
 "$ADB" devices
 
+# Make sure the destination dir exists. The app creates it on first launch
+# but if the user runs this before launching the app, we have to mkdir.
+echo "==> Ensuring destination dir exists on device..."
+"$ADB" shell "mkdir -p $DEST" || true
+
 for f in \
   "gemma-4-E2B-it_qualcomm_sm8750.litertlm" \
   "FastVLM-0.5B.qualcomm.sm8750.litertlm" \
@@ -44,4 +56,4 @@ done
 
 echo
 echo "==> Verifying files on device:"
-"$ADB" shell "ls -lh $DEST/*.litertlm $DEST/*.tflite 2>/dev/null"
+"$ADB" shell "ls -lh $DEST/ 2>/dev/null"

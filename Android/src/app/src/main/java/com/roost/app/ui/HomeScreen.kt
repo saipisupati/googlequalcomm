@@ -56,6 +56,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item { HeaderBlock() }
+        item { ModelStatusRow(state) }
         item { DragonCard(state) }
         item {
             Row(
@@ -109,6 +110,42 @@ private fun HeaderBlock() {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+    }
+}
+
+/**
+ * Tiny status row showing whether real LiteRT models are loaded or we're running on
+ * mock fallbacks. Helps debug "wait, why is it showing Chipotle again" during development.
+ */
+@Composable
+private fun ModelStatusRow(state: HomeUiState) {
+    val ms = state.modelStatus
+    val gemmaLabel = when {
+        ms.forceMockLlm -> "Gemma: mock (forced)"
+        ms.gemmaInstalled -> "Gemma: ON-DEVICE"
+        else -> "Gemma: mock (no model)"
+    }
+    val visionLabel = when {
+        ms.forceMockVision -> "FastVLM: mock (forced)"
+        ms.fastVlmInstalled -> "FastVLM: ON-DEVICE"
+        else -> "FastVLM: mock (no model)"
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        StatusChip(label = gemmaLabel, isReal = ms.gemmaInstalled && !ms.forceMockLlm)
+        StatusChip(label = visionLabel, isReal = ms.fastVlmInstalled && !ms.forceMockVision)
+    }
+}
+
+@Composable
+private fun StatusChip(label: String, isReal: Boolean) {
+    val bg = if (isReal) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
+    val fg = if (isReal) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+    Box(
+        modifier = Modifier
+            .background(bg, RoundedCornerShape(50))
+            .padding(horizontal = 10.dp, vertical = 4.dp),
+    ) {
+        Text(label, style = MaterialTheme.typography.labelSmall, color = fg)
     }
 }
 

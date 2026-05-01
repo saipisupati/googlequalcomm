@@ -15,6 +15,7 @@ import com.roost.app.runtime.LiteRtVisionEngine
 import com.roost.app.runtime.LocalLLMEngine
 import com.roost.app.runtime.MockLocalLLMEngine
 import com.roost.app.runtime.MockReceiptVisionEngine
+import com.roost.app.runtime.ModelInstaller
 import com.roost.app.runtime.ReceiptVisionEngine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
  * Why no Hilt: 18-hour hackathon, four files of plumbing isn't worth a 30-min Hilt setup.
  * Repos and engines are stateless / single-instance — manual wiring is fine.
  */
-class AppContainer(context: Context) {
+class AppContainer(private val context: Context) {
 
     private val db = RoostDatabase.get(context)
 
@@ -56,4 +57,23 @@ class AppContainer(context: Context) {
             dragon.seedIfEmpty(Seeder.initialDragon)
         }
     }
+
+    /**
+     * For the on-screen "engine status" badge. Reads filesystem each call so the UI
+     * always reflects the truth — useful when a teammate pushes a new model file
+     * mid-session and we want to verify it's actually picked up.
+     */
+    fun modelStatus(): ModelStatus = ModelStatus(
+        gemmaInstalled = ModelInstaller.gemmaPresent(context),
+        fastVlmInstalled = ModelInstaller.fastVlmPresent(context),
+        forceMockLlm = DemoMode.FORCE_MOCK_LLM,
+        forceMockVision = DemoMode.FORCE_MOCK_VISION,
+    )
 }
+
+data class ModelStatus(
+    val gemmaInstalled: Boolean,
+    val fastVlmInstalled: Boolean,
+    val forceMockLlm: Boolean,
+    val forceMockVision: Boolean,
+)

@@ -7,8 +7,8 @@ import android.util.Log
  * Wraps a primary vision engine and falls back to a secondary if the primary throws OR
  * if the primary returns a low-confidence draft (likely hallucination on the small VLM).
  *
- * Failure is sticky like the LLM fallback: once we know FastVLM isn't going to work
- * this session, no more 10-second init attempts.
+ * Each call gets a fresh try at the primary. We don't cache the failure so model-file
+ * additions mid-session take effect on the next request.
  *
  * Confidence threshold: 0.4 — anything below means FastVLM read the image but couldn't
  * parse a merchant or amount. In that case we'd rather give the user a believable demo
@@ -20,21 +20,19 @@ class FallbackVisionEngine(
     private val confidenceFloor: Float = 0.4f,
 ) : ReceiptVisionEngine {
 
-    @Volatile
-    private var primaryFailed = false
-
     override suspend fun extractPurchaseFromImage(imageUri: Uri?): PurchaseDraft {
-        if (!primaryFailed) {
-            try {
-                val draft = primary.extractPurchaseFromImage(imageUri)
-                if (draft.confidence >= confidenceFloor) return draft
-                Log.w(TAG, "Primary vision returned low-confidence (${draft.confidence}); falling back")
-            } catch (t: Throwable) {
-                Log.w(TAG, "Primary vision failed, switching to fallback for the rest of this session", t)
-                primaryFailed = true
+        return try {
+            val draft = primary.extractPurchaseFromImage(imageUri)
+            if (draft.confidence >= confidenceFloor) {
+                draft
+            } else {
+                Log.w(TAG, "Primary vision low-confidence (${draft.confidence}); using fallback")
+                secondary.extractPurchaseFromImage(imageUri)
             }
+        } catch (t: Throwable) {
+            Log.w(TAG, "Primary vision failed; using fallback for this call", t)
+            secondary.extractPurchaseFromImage(imageUri)
         }
-        return secondary.extractPurchaseFromImage(imageUri)
     }
 
     private companion object {
