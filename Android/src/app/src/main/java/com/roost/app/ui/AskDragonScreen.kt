@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
@@ -24,7 +26,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
 private val Presets = listOf(
@@ -39,6 +43,7 @@ fun AskDragonScreen(
     onBack: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
+    val keyboard = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -82,11 +87,20 @@ fun AskDragonScreen(
             value = state.question,
             onValueChange = viewModel::onQuestionChange,
             label = { Text("Or ask your own") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(onSend = {
+                keyboard?.hide()
+                viewModel.onAsk()
+            }),
             modifier = Modifier.fillMaxWidth(),
         )
 
         Button(
-            onClick = { viewModel.onAsk() },
+            onClick = {
+                keyboard?.hide()
+                viewModel.onAsk()
+            },
             enabled = !state.asking && state.question.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
         ) {

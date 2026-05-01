@@ -91,6 +91,11 @@ dependencies {
     // Resolves from Google Maven; ships native NPU bridge for Snapdragon 8 Elite (sm8750).
     implementation("com.google.ai.edge.litertlm:litertlm-android:0.10.0")
 
+    // LiteRT (TFLite) — used to run EmbeddingGemma 300M for on-device semantic similarity
+    // over the user's spending history. Plain TFLite Interpreter; no QAIRT SDK needed.
+    implementation("com.google.ai.edge.litert:litert:1.4.0")
+    implementation("com.google.ai.edge.litert:litert-support:1.4.0")
+
     // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
