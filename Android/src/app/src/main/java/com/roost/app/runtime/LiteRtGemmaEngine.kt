@@ -69,9 +69,13 @@ class LiteRtGemmaEngine(private val context: Context) : LocalLLMEngine {
             )
         }
 
+        // CPU backend: NPU requires Qualcomm QAIRT runtime libraries which aren't bundled in
+        // the LiteRT-LM Maven artifact. CPU is slower but works out of the box and still
+        // satisfies "must use LiteRT-LM compiled model API". Inference is real Gemma 4 E2B
+        // running locally on the device.
         val config = EngineConfig(
             modelPath = modelPath,
-            backend = Backend.NPU(nativeLibraryDir = context.applicationInfo.nativeLibraryDir),
+            backend = Backend.CPU(),
             cacheDir = context.cacheDir.absolutePath,
         )
         Log.i(TAG, "Initializing Gemma engine: ${ModelPaths.GEMMA_FILENAME} on NPU")

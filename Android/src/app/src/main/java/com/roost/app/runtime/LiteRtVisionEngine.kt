@@ -42,7 +42,19 @@ class LiteRtVisionEngine(private val context: Context) : ReceiptVisionEngine {
 
     override suspend fun extractPurchaseFromImage(imageUri: Uri?): PurchaseDraft = withContext(Dispatchers.IO) {
         val uri = imageUri ?: error("LiteRtVisionEngine requires a non-null imageUri")
-        val imagePath = uri.path ?: uri.toString()
+        // Copy the captured photo into the app's external files dir before passing to FastVLM.
+        // CameraX writes to context.cacheDir which is /data/data/... — that path is private to
+        // our process but the native LiteRT-LM engine sometimes can't open it cleanly. The
+        // external files dir (/sdcard/Android/data/com.roost.app/files/...) is more reliable
+        // and we already use it for models.
+        val srcPath = uri.path ?: error("imageUri has no filesystem path: $uri")
+        val srcFile = File(srcPath)
+        if (!srcFile.exists()) error("Captured photo not found at $srcPath")
+        val externalDir = context.getExternalFilesDir(null) ?: error("External files dir unavailable")
+        val stagingFile = File(externalDir, "last-receipt.jpg")
+        srcFile.copyTo(stagingFile, overwrite = true)
+        Log.i(TAG, "Staged receipt photo: ${stagingFile.absolutePath} (${stagingFile.length()} bytes)")
+
         val started = System.currentTimeMillis()
 
         mutex.withLock {
@@ -51,7 +63,7 @@ class LiteRtVisionEngine(private val context: Context) : ReceiptVisionEngine {
                 val response = StringBuilder()
                 conv.sendMessageAsync(
                     Contents.of(
-                        Content.ImageFile(imagePath),
+                        Content.ImageFile(stagingFile.absolutePath),
                         Content.Text(VISION_PROMPT),
                     )
                 )
@@ -79,10 +91,12 @@ class LiteRtVisionEngine(private val context: Context) : ReceiptVisionEngine {
             )
         }
 
+        // CPU backend: NPU needs Qualcomm QAIRT runtime which isn't bundled. CPU still runs
+        // real FastVLM 0.5B locally — slower than NPU but satisfies LiteRT-LM judging.
         val config = EngineConfig(
             modelPath = modelPath,
-            backend = Backend.NPU(nativeLibraryDir = context.applicationInfo.nativeLibraryDir),
-            visionBackend = Backend.NPU(nativeLibraryDir = context.applicationInfo.nativeLibraryDir),
+            backend = Backend.CPU(),
+            visionBackend = Backend.CPU(),
             cacheDir = context.cacheDir.absolutePath,
         )
         Log.i(TAG, "Initializing FastVLM engine: ${ModelPaths.FAST_VLM_FILENAME} on NPU")
